@@ -1,51 +1,37 @@
 import "./App.css";
+import NewsBlock from "./NewsBlock";
 import "bootstrap/dist/css/bootstrap.css";
 import React from "react";
+import NewsArticle from "./NewsArticle";
 
 export default function App() {
-  const [starWarsData, setStarWarsData] = React.useState({});
-  const [count, setCount] = React.useState(1);
+  const [Products, setProducts] = React.useState([]);
 
-  console.log("get data from API");
+  React.useEffect(function () {
+    fetch(`https://fakestoreapi.com/products/`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
+  }, []);
 
-  // built in functions / methods;
-  // fetch() -> API hit
-  // then() ->
-  // json() ->
-
-  // fetch();
-  // then();
-  // json();
-
-  // fetch(`https://swapi.dev/api/people/1`)
-  //   .then((res) => res.json())
-  //   .then((data) => setStarWarsData(data)); //=>setter function state variable
-
-  // console.log(starWarsData);
-
-  React.useEffect(
-    function () {
-      console.log("Effect ran");
-      fetch(`https://swapi.dev/api/people/${count}`)
-        .then((res) => res.json())
-        .then((data) => setStarWarsData(data));
-    },
-    [count]
-  );
+  const NewsList = Products.map(function (item) {
+    return (
+      <NewsArticle
+        productImage={item.image}
+        productDesc={item.description}
+        productPrice={item.price}
+        productName={item.title}
+      />
+    );
+  });
 
   return (
-    // setterFunction((receive current value of state variable) => receivedVariable +/-)
-
-    <div>
-      <h2>The count is {count}</h2>
-      <button onClick={() => setCount((prevCount) => prevCount + 1)}>
-        Get Next Character
-      </button>
-      {/* respects line breaks and spaces  */}
-
-      <pre>{JSON.stringify(starWarsData, null, 5)}</pre>
-      {/* maintains line breaks and spaces */}
-      {/* JS expressions = {} */}
+    <div className="container">
+      <div className="row">
+        <div className="col-12">
+          {/* <h1 class="text-center">Taazaa Store</h1> */}
+        </div>
+      </div>
+      <div className="row">{NewsList}</div>
     </div>
   );
 }
